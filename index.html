@@ -64,8 +64,12 @@
             color: #721c24;
         }
         
-        /* Hide Tableau toolbar if needed */
-        .tabToolbarButton {
+        /* Hide any remaining Tableau branding/toolbar elements */
+        div[data-tb-test-id="shareDialog-shareButton"],
+        .tab-toolbar,
+        .tabToolbarButton,
+        .shareButton,
+        button[title="View on Tableau Public"] {
             display: none !important;
         }
     </style>
@@ -78,9 +82,7 @@
         
         <div id="status" class="status"></div>
         
-        <div id="tableauViz">
-            <div class="loading">Loading dashboard...</div>
-        </div>
+        <div id="tableauViz"></div>
     </div>
 
     <script>
@@ -108,8 +110,8 @@
                 const options = {
                     width: '100%',
                     height: '900px',
-                    hideTabs: false,
-                    hideToolbar: false,
+                    hideTabs: true,
+                    hideToolbar: true,
                     onFirstInteractive: () => {
                         console.log('Dashboard loaded successfully');
                         this.onDashboardLoad();
