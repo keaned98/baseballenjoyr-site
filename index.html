@@ -1,214 +1,276 @@
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
-<div class='tableauPlaceholder' id='viz1743098219082' style='position: relative'>
-  <noscript>
-    <a href='#'>
-      <img alt='Dashboard 1' src='https://public.tableau.com/static/images/20/2025alpha/Dashboard1/1_rss.png' style='border: none' />
-    </a>
-  </noscript>
-  <object class='tableauViz' style='display:none;'>
-    <param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' />
-    <param name='embed_code_version' value='3' />
-    <param name='site_root' value='' />
-    <param name='name' value='2025alpha&#47;Dashboard1' />
-    <param name='tabs' value='no' />
-    <param name='toolbar' value='no' />
-    <param name='static_image' value='https://public.tableau.com/static/images/20/2025alpha/Dashboard1/1.png' />
-    <param name='animate_transition' value='yes' />
-    <param name='display_static_image' value='yes' />
-    <param name='display_spinner' value='yes' />
-    <param name='display_overlay' value='yes' />
-    <param name='display_count' value='yes' />
-    <param name='language' value='en-US' />
-    <param name='device' value='desktop' />
-    <param name='showVizHome' value='no' />
-    <param name='showShareOptions' value='no' />
-    <param name='showFooter' value='false' />
-  </object>
-</div>
-
-<style>
-  /* Hide Tableau footer elements */
-  .TableauPlaceholderFooter, 
-  .tab-share, 
-  .tab-logo, 
-  .tableauFooter,
-  div[class*="Footer"],
-  div[class*="footer"],
-  div[id*="Footer"],
-  div[id*="footer"] {
-    display: none !important;
-    visibility: hidden !important;
-    height: 0 !important;
-    width: 0 !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    border: none !important;
-  }
-  
-  /* Create a mask that covers just the footer area */
-  #viz1743098219082 {
-    position: relative;
-    overflow: hidden;
-  }
-  
-  #viz1743098219082:after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 30px;
-    background-color: white;
-    z-index: 9999;
-  }
-  
-  /* Mobile scaling - much more aggressive to fit entire dashboard */
-  @media only screen and (max-width: 767px) {
-    .tableauPlaceholder {
-      display: flex !important;
-      justify-content: center !important;
-      align-items: center !important;
-      height: 100vh !important;
-      overflow: hidden !important;
-      margin: 0 !important;
-      padding: 0 !important;
-    }
-    
-    /* Ensure container has no scrollbars */
-    body, html {
-      overflow: hidden !important;
-      margin: 0 !important;
-      padding: 0 !important;
-      height: 100% !important;
-      width: 100% !important;
-    }
-    
-    /* Very aggressive scaling for mobile */
-    .tableau-viz-container, iframe, .tableauViz {
-      transform-origin: center !important;
-      transform: scale(0.45) !important;
-      max-width: 100vw !important;
-      max-height: 100vh !important;
-      margin: 0 auto !important;
-      overflow: hidden !important;
-    }
-  }
-  
-  /* Extra small devices */
-  @media only screen and (max-width: 375px) {
-    .tableau-viz-container, iframe, .tableauViz {
-      transform: scale(0.4) !important;
-    }
-  }
-</style>
-
-<script type='text/javascript'>
-  var divElement = document.getElementById('viz1743098219082');
-  var vizElement = divElement.getElementsByTagName('object')[0];
-  
-  // Keep fixed dimensions for desktop
-  vizElement.style.width = '1024px';
-  vizElement.style.height = '727px';
-  
-  var scriptElement = document.createElement('script');
-  scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';
-  
-  // Function to handle iframe content once loaded
-  scriptElement.onload = function() {
-    // Apply footer hiding techniques
-    setTimeout(function() {
-      // Try to inject CSS into the iframe
-      var iframes = document.querySelectorAll('iframe');
-      Array.from(iframes).forEach(function(iframe) {
-        try {
-          var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-          var style = document.createElement('style');
-          style.textContent = `
-            .TableauPlaceholderFooter, 
-            .tab-share, 
-            .tab-logo, 
-            .tableauFooter,
-            div[class*="Footer"],
-            div[class*="footer"],
-            div[id*="Footer"],
-            div[id*="footer"],
-            .tab-logo-container {
-              display: none !important;
-              visibility: hidden !important;
-              height: 0 !important;
-              opacity: 0 !important;
-            }
-            
-            /* Add padding to the viz container */
-            body {
-              padding-bottom: 50px !important;
-              margin-bottom: -50px !important;
-              overflow: hidden !important;
-            }
-          `;
-          iframeDoc.head.appendChild(style);
-        } catch(e) {
-          console.log("Couldn't directly modify iframe content");
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Baseball Player Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f5f5f5;
         }
-      });
-      
-      // Create an overlay div
-      var overlay = document.createElement('div');
-      overlay.style.position = 'absolute';
-      overlay.style.bottom = '0';
-      overlay.style.left = '0';
-      overlay.style.width = '100%';
-      overlay.style.height = '40px';
-      overlay.style.backgroundColor = 'white';
-      overlay.style.zIndex = '9999';
-      divElement.appendChild(overlay);
-      
-      // Set very aggressive scaling for mobile
-      function adjustForMobile() {
-        var isMobile = window.matchMedia("(max-width: 767px)").matches;
         
-        if (isMobile) {
-          // Find the tableau iframe and apply scaling
-          var tableauFrame = document.querySelector('iframe');
-          if (tableauFrame) {
-            // Create wrapper if needed
-            var wrapper = tableauFrame.parentNode;
-            wrapper.style.overflow = 'hidden';
-            wrapper.style.display = 'flex';
-            wrapper.style.justifyContent = 'center';
-            wrapper.style.alignItems = 'center';
-            
-            // Apply scaling based on screen width
-            var scaleValue = 0.45; // Default scaling
-            if (window.innerWidth <= 375) {
-              scaleValue = 0.4; // Even more aggressive scaling for small phones
-            }
-            
-            tableauFrame.style.transformOrigin = 'center';
-            tableauFrame.style.transform = 'scale(' + scaleValue + ')';
-            tableauFrame.style.maxWidth = '100vw';
-            tableauFrame.style.maxHeight = '100vh';
-            tableauFrame.parentNode.style.overflow = 'hidden';
-            
-            // Disable scrolling
-            document.body.style.overflow = 'hidden';
-            document.documentElement.style.overflow = 'hidden';
-          }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
         }
-      }
-      
-      // Apply mobile adjustments
-      adjustForMobile();
-      
-      // Handle orientation changes
-      window.addEventListener('resize', adjustForMobile);
-      window.addEventListener('orientationchange', function() {
-        setTimeout(adjustForMobile, 300);
-      });
-      
-    }, 1500);
-  };
-  
-  vizElement.parentNode.insertBefore(scriptElement, vizElement);
-</script>
+        
+        .header {
+            background: #1f2937;
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        
+        #dashboardContainer {
+            width: 100%;
+            margin-top: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        /* Hide Tableau footer elements */
+        .TableauPlaceholderFooter, 
+        .tab-share, 
+        .tab-logo, 
+        .tableauFooter,
+        div[class*="Footer"],
+        div[class*="footer"],
+        div[id*="Footer"],
+        div[id*="footer"] {
+            display: none !important;
+            visibility: hidden !important;
+            height: 0 !important;
+            width: 0 !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            border: none !important;
+        }
+
+        /* Create a mask that covers just the footer area */
+        #viz1743098219082 {
+            position: relative;
+            overflow: hidden;
+        }
+
+        #viz1743098219082:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 30px;
+            background-color: #f5f5f5;
+            z-index: 9999;
+        }
+
+        /* Mobile scaling - much more aggressive to fit entire dashboard */
+        @media only screen and (max-width: 767px) {
+            .tableauPlaceholder {
+                display: flex !important;
+                justify-content: center !important;
+                align-items: center !important;
+                height: 100vh !important;
+                overflow: hidden !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+
+            /* Ensure container has no scrollbars */
+            body, html {
+                overflow: hidden !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                height: 100% !important;
+                width: 100% !important;
+            }
+
+            /* Very aggressive scaling for mobile */
+            .tableau-viz-container, iframe, .tableauViz {
+                transform-origin: center !important;
+                transform: scale(0.45) !important;
+                max-width: 100vw !important;
+                max-height: 100vh !important;
+                margin: 0 auto !important;
+                overflow: hidden !important;
+            }
+        }
+
+        /* Extra small devices */
+        @media only screen and (max-width: 375px) {
+            .tableau-viz-container, iframe, .tableauViz {
+                transform: scale(0.4) !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Baseball Player Dashboard</h1>
+        </div>
+        
+        <div id="dashboardContainer">
+            <div class='tableauPlaceholder' id='viz1743098219082' style='position: relative'>
+                <noscript>
+                    <a href='#'>
+                        <img alt='Dashboard 1' src='https://public.tableau.com/static/images/20/2025alpha/Dashboard1/1_rss.png' style='border: none' />
+                    </a>
+                </noscript>
+                <object class='tableauViz' style='display:none;'>
+                    <param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' />
+                    <param name='embed_code_version' value='3' />
+                    <param name='site_root' value='' />
+                    <param name='name' value='2025alpha&#47;Dashboard1' />
+                    <param name='tabs' value='no' />
+                    <param name='toolbar' value='no' />
+                    <param name='static_image' value='https://public.tableau.com/static/images/20/2025alpha/Dashboard1/1.png' />
+                    <param name='animate_transition' value='yes' />
+                    <param name='display_static_image' value='yes' />
+                    <param name='display_spinner' value='yes' />
+                    <param name='display_overlay' value='yes' />
+                    <param name='display_count' value='yes' />
+                    <param name='language' value='en-US' />
+                    <param name='device' value='desktop' />
+                    <param name='showVizHome' value='no' />
+                    <param name='showShareOptions' value='no' />
+                    <param name='showFooter' value='false' />
+                </object>
+            </div>
+        </div>
+    </div>
+
+    <script type='text/javascript'>
+        var divElement = document.getElementById('viz1743098219082');
+        var vizElement = divElement.getElementsByTagName('object')[0];
+
+        // Keep fixed dimensions for desktop
+        vizElement.style.width = '1024px';
+        vizElement.style.height = '727px';
+
+        var scriptElement = document.createElement('script');
+        scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';
+
+        // Function to handle iframe content once loaded
+        scriptElement.onload = function() {
+            // Apply footer hiding techniques
+            setTimeout(function() {
+                // Try to inject CSS into the iframe
+                var iframes = document.querySelectorAll('iframe');
+                Array.from(iframes).forEach(function(iframe) {
+                    try {
+                        var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                        var style = document.createElement('style');
+                        style.textContent = `
+                            .TableauPlaceholderFooter, 
+                            .tab-share, 
+                            .tab-logo, 
+                            .tableauFooter,
+                            div[class*="Footer"],
+                            div[class*="footer"],
+                            div[id*="Footer"],
+                            div[id*="footer"],
+                            .tab-logo-container {
+                                display: none !important;
+                                visibility: hidden !important;
+                                height: 0 !important;
+                                opacity: 0 !important;
+                            }
+
+                            /* Add padding to the viz container */
+                            body {
+                                padding-bottom: 50px !important;
+                                margin-bottom: -50px !important;
+                                overflow: hidden !important;
+                            }
+                        `;
+                        iframeDoc.head.appendChild(style);
+                    } catch(e) {
+                        console.log("Couldn't directly modify iframe content");
+                    }
+                });
+
+                // Create an overlay div
+                var overlay = document.createElement('div');
+                overlay.style.position = 'absolute';
+                overlay.style.bottom = '0';
+                overlay.style.left = '0';
+                overlay.style.width = '100%';
+                overlay.style.height = '40px';
+                overlay.style.backgroundColor = '#f5f5f5';
+                overlay.style.zIndex = '9999';
+                divElement.appendChild(overlay);
+
+                // Set very aggressive scaling for mobile
+                function adjustForMobile() {
+                    var isMobile = window.matchMedia("(max-width: 767px)").matches;
+
+                    if (isMobile) {
+                        // Find the tableau iframe and apply scaling
+                        var tableauFrame = document.querySelector('iframe');
+                        if (tableauFrame) {
+                            // Create wrapper if needed
+                            var wrapper = tableauFrame.parentNode;
+                            wrapper.style.overflow = 'hidden';
+                            wrapper.style.display = 'flex';
+                            wrapper.style.justifyContent = 'center';
+                            wrapper.style.alignItems = 'center';
+
+                            // Apply scaling based on screen width
+                            var scaleValue = 0.45; // Default scaling
+                            if (window.innerWidth <= 375) {
+                                scaleValue = 0.4; // Even more aggressive scaling for small phones
+                            }
+
+                            tableauFrame.style.transformOrigin = 'center';
+                            tableauFrame.style.transform = 'scale(' + scaleValue + ')';
+                            tableauFrame.style.maxWidth = '100vw';
+                            tableauFrame.style.maxHeight = '100vh';
+                            tableauFrame.parentNode.style.overflow = 'hidden';
+
+                            // Disable scrolling
+                            document.body.style.overflow = 'hidden';
+                            document.documentElement.style.overflow = 'hidden';
+                        }
+                    }
+                }
+
+                // Apply mobile adjustments
+                adjustForMobile();
+
+                // Handle orientation changes
+                window.addEventListener('resize', adjustForMobile);
+                window.addEventListener('orientationchange', function() {
+                    setTimeout(adjustForMobile, 300);
+                });
+
+            }, 1500);
+        };
+
+        vizElement.parentNode.insertBefore(scriptElement, vizElement);
+
+        // For Discord bot automation
+        window.isDashboardReady = function() {
+            return document.querySelector('iframe') !== null;
+        };
+
+        window.takeScreenshot = function() {
+            return new Promise(function(resolve) {
+                setTimeout(function() {
+                    resolve(true);
+                }, 1000);
+            });
+        };
+    </script>
+</body>
+</html>
