@@ -66,6 +66,14 @@
             color: #721c24;
         }
         
+        /* Hide the specific Tableau toolbar */
+        #viz-viewer-toolbar,
+        div[data-tb-test-id="viz-viewer-toolbar-items-container"],
+        .fl0fe5p.fgna3mm,
+        #tableauPublicButton,
+        button[data-tb-test-id="viz-viewer-toolbar-button-public-info-button"],
+        .toolbar-item.public,
+        div[aria-label="Visualization controls"],
         /* Hide any remaining Tableau branding/toolbar elements */
         div[data-tb-test-id="shareDialog-shareButton"],
         .tab-toolbar,
@@ -83,6 +91,7 @@
             display: none !important;
             visibility: hidden !important;
             opacity: 0 !important;
+            height: 0 !important;
         }
         
         /* Force hide the bottom area with white overlay */
