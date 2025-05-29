@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Player Dashboard</title>
+    <script src="https://public.tableau.com/javascripts/api/tableau-2.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: #1f2937;
+            color: white;
+            padding: 20px;
+        }
+        
+        .controls {
+            padding: 20px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .control-group {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .control-group label {
+            font-weight: bold;
+            color: #495057;
+        }
+        
+        .control-group select, .control-group input {
+            padding: 8px 12px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .control-group button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .control-group button:hover {
+            background: #0056b3;
+        }
+        
+        .control-group button:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+        }
+        
+        #tableauViz {
+            width: 100%;
+            height: 800px;
+            position: relative;
+        }
+        
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+            color: #6c757d;
+        }
+        
+        .status {
+            padding: 10px 20px;
+            margin: 10px 0;
+            border-radius: 4px;
+            display: none;
+        }
+        
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Player Dashboard</h1>
+            <p>Interactive Tableau dashboard with automated controls</p>
+        </div>
+        
+        <div class="controls">
+            <div class="control-group">
+                <label for="playerSelect">Select Player:</label>
+                <select id="playerSelect">
+                    <option value="">Choose a player...</option>
+                    <!-- Players will be populated dynamically -->
+                </select>
+                
+                <label for="seasonSelect">Season:</label>
+                <select id="seasonSelect">
+                    <option value="">All Seasons</option>
+                    <option value="2023-24">2023-24</option>
+                    <option value="2022-23">2022-23</option>
+                    <option value="2021-22">2021-22</option>
+                </select>
+                
+                <button id="applyFilters" disabled>Apply Filters</button>
+                <button id="screenshotBtn" disabled>Take Screenshot</button>
+                <button id="resetBtn" disabled>Reset Filters</button>
+            </div>
+        </div>
+        
+        <div id="status" class="status"></div>
+        
+        <div id="tableauViz">
+            <div class="loading">Loading dashboard...</div>
+        </div>
+    </div>
+
+    <script>
+        class TableauDashboard {
+            constructor() {
+                this.viz = null;
+                this.workbook = null;
+                this.worksheet = null;
+                this.isLoaded = false;
+                
+                // Your actual Tableau Public URL
+                this.tableauUrl = 'https://public.tableau.com/views/2025alpha/Dashboard1';
+                
+                this.init();
+            }
+            
+            init() {
+                this.setupEventListeners();
+                this.loadDashboard();
+                this.parseUrlParameters();
+            }
+            
+            setupEventListeners() {
+                document.getElementById('applyFilters').addEventListener('click', () => this.applyFilters());
+                document.getElementById('screenshotBtn').addEventListener('click', () => this.takeScreenshot());
+                document.getElementById('resetBtn').addEventListener('click', () => this.resetFilters());
+                
+                // Auto-apply when selections change
+                document.getElementById('playerSelect').addEventListener('change', () => this.applyFilters());
+                document.getElementById('seasonSelect').addEventListener('change', () => this.applyFilters());
+            }
+            
+            loadDashboard() {
+                const containerDiv = document.getElementById('tableauViz');
+                
+                const options = {
+                    width: '100%',
+                    height: '800px',
+                    hideTabs: false,
+                    hideToolbar: false,
+                    onFirstInteractive: () => {
+                        console.log('Dashboard loaded successfully');
+                        this.onDashboardLoad();
+                    }
+                };
+                
+                this.viz = new tableau.Viz(containerDiv, this.tableauUrl, options);
+            }
+            
+            async onDashboardLoad() {
+                try {
+                    this.workbook = this.viz.getWorkbook();
+                    this.worksheet = this.workbook.getActiveSheet();
+                    
+                    // If it's a dashboard, get the first worksheet
+                    if (this.worksheet.getSheetType() === 'dashboard') {
+                        const worksheets = this.worksheet.getWorksheets();
+                        this.worksheet = worksheets.get(0);
+                    }
+                    
+                    this.isLoaded = true;
+                    this.enableControls();
+                    await this.populatePlayerList();
+                    this.showStatus('Dashboard loaded successfully!', 'success');
+                    
+                    // Apply URL parameters if they exist
+                    this.applyUrlFilters();
+                    
+                } catch (error) {
+                    console.error('Error loading dashboard:', error);
+                    this.showStatus('Error loading dashboard: ' + error.message, 'error');
+                }
+            }
+            
+            enableControls() {
+                document.getElementById('applyFilters').disabled = false;
+                document.getElementById('screenshotBtn').disabled = false;
+                document.getElementById('resetBtn').disabled = false;
+            }
+            
+            async populatePlayerList() {
+                try {
+                    // This would need to be customized based on your actual field names
+                    const dataTable = await this.worksheet.getSummaryDataAsync();
+                    const playerColumn = dataTable.getColumns().find(col => 
+                        col.getFieldName().toLowerCase().includes('player')
+                    );
+                    
+                    if (playerColumn) {
+                        const players = new Set();
+                        for (let i = 0; i < dataTable.getData().length; i++) {
+                            const playerName = dataTable.getData()[i][playerColumn.getIndex()].value;
+                            if (playerName && playerName !== 'null') {
+                                players.add(playerName);
+                            }
+                        }
+                        
+                        const select = document.getElementById('playerSelect');
+                        Array.from(players).sort().forEach(player => {
+                            const option = document.createElement('option');
+                            option.value = player;
+                            option.textContent = player;
+                            select.appendChild(option);
+                        });
+                    }
+                } catch (error) {
+                    console.log('Could not auto-populate players. You may need to add them manually.');
+                }
+            }
+            
+            async applyFilters() {
+                if (!this.isLoaded) return;
+                
+                try {
+                    const player = document.getElementById('playerSelect').value;
+                    const season = document.getElementById('seasonSelect').value;
+                    
+                    if (player) {
+                        // Adjust field name to match your Tableau dashboard
+                        await this.worksheet.applyFilterAsync('Name', player, tableau.FilterUpdateType.REPLACE);
+                    }
+                    
+                    if (season) {
+                        // Adjust field name to match your Tableau dashboard
+                        await this.worksheet.applyFilterAsync('Season', season, tableau.FilterUpdateType.REPLACE);
+                    }
+                    
+                    this.showStatus(`Filters applied: ${player || 'All Players'}, ${season || 'All Seasons'}`, 'success');
+                    
+                    // Update URL for sharing
+                    this.updateUrl(player, season);
+                    
+                } catch (error) {
+                    console.error('Error applying filters:', error);
+                    this.showStatus('Error applying filters: ' + error.message, 'error');
+                }
+            }
+            
+            async resetFilters() {
+                if (!this.isLoaded) return;
+                
+                try {
+                    await this.worksheet.clearFilterAsync('Name');
+                    await this.worksheet.clearFilterAsync('Season');
+                    
+                    document.getElementById('playerSelect').value = '';
+                    document.getElementById('seasonSelect').value = '';
+                    
+                    this.showStatus('Filters reset', 'success');
+                    this.updateUrl('', '');
+                    
+                } catch (error) {
+                    console.error('Error resetting filters:', error);
+                    this.showStatus('Error resetting filters: ' + error.message, 'error');
+                }
+            }
+            
+            async takeScreenshot() {
+                if (!this.isLoaded) return;
+                
+                try {
+                    const player = document.getElementById('playerSelect').value || 'All';
+                    const season = document.getElementById('seasonSelect').value || 'All';
+                    
+                    // Wait a moment for filters to fully apply
+                    await new Promise(resolve => setTimeout(resolve, 2000));
+                    
+                    // Export as image
+                    this.viz.showExportImageDialog();
+                    
+                    this.showStatus(`Screenshot initiated for ${player} (${season})`, 'success');
+                    
+                } catch (error) {
+                    console.error('Error taking screenshot:', error);
+                    this.showStatus('Error taking screenshot: ' + error.message, 'error');
+                }
+            }
+            
+            parseUrlParameters() {
+                const urlParams = new URLSearchParams(window.location.search);
+                const player = urlParams.get('player');
+                const season = urlParams.get('season');
+                
+                if (player) document.getElementById('playerSelect').value = decodeURIComponent(player);
+                if (season) document.getElementById('seasonSelect').value = decodeURIComponent(season);
+            }
+            
+            applyUrlFilters() {
+                const player = document.getElementById('playerSelect').value;
+                const season = document.getElementById('seasonSelect').value;
+                
+                if (player || season) {
+                    setTimeout(() => this.applyFilters(), 1000);
+                }
+            }
+            
+            updateUrl(player, season) {
+                const url = new URL(window.location);
+                
+                if (player) {
+                    url.searchParams.set('player', encodeURIComponent(player));
+                } else {
+                    url.searchParams.delete('player');
+                }
+                
+                if (season) {
+                    url.searchParams.set('season', encodeURIComponent(season));
+                } else {
+                    url.searchParams.delete('season');
+                }
+                
+                window.history.replaceState({}, '', url);
+            }
+            
+            showStatus(message, type) {
+                const status = document.getElementById('status');
+                status.textContent = message;
+                status.className = `status ${type}`;
+                status.style.display = 'block';
+                
+                setTimeout(() => {
+                    status.style.display = 'none';
+                }, 3000);
+            }
+        }
+        
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            window.dashboard = new TableauDashboard();
+        });
+        
+        // For automation/scraping - expose these functions globally
+        window.automateFilters = async (player, season) => {
+            if (window.dashboard && window.dashboard.isLoaded) {
+                document.getElementById('playerSelect').value = player || '';
+                document.getElementById('seasonSelect').value = season || '';
+                await window.dashboard.applyFilters();
+                return true;
+            }
+            return false;
+        };
+        
+        window.automateScreenshot = async () => {
+            if (window.dashboard && window.dashboard.isLoaded) {
+                await window.dashboard.takeScreenshot();
+                return true;
+            }
+            return false;
+        };
+    </script>
+</body>
+</html>
