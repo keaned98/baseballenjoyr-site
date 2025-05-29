@@ -36,6 +36,7 @@
             width: 100%;
             height: 900px;
             position: relative;
+            margin-top: 40px;
         }
         
         .loading {
@@ -69,8 +70,26 @@
         .tab-toolbar,
         .tabToolbarButton,
         .shareButton,
-        button[title="View on Tableau Public"] {
+        button[title="View on Tableau Public"],
+        .tableauViz a[href*="tableau.com"],
+        .tableauViz .tab-api-link,
+        .tableauViz .tab-site-branding,
+        .tableauViz .tab-share-button,
+        .tableauViz div[style*="position: absolute"][style*="bottom: 0"] {
             display: none !important;
+            visibility: hidden !important;
+        }
+        
+        /* Force hide the bottom Tableau link */
+        .tableauViz::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 40px;
+            background: white;
+            z-index: 999;
         }
     </style>
 </head>
