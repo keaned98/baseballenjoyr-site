@@ -1,209 +1,214 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Baseball Player Dashboard</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background: #f5f5f5;
-        }
-        
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            background: white;
-            min-height: 100vh;
-        }
-        
-        .header {
-            background: #1f2937;
-            color: white;
-            padding: 15px 20px;
-            text-align: center;
-        }
-        
-        .header h1 {
-            margin: 0;
-            font-size: 24px;
-        }
-        
-        #dashboardContainer {
-            width: 100%;
-            margin-top: 40px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-        }
-        
-        .tableauPlaceholder {
-            position: relative;
-            width: 1024px;
-            height: 687px;
-            overflow: hidden;
-        }
-        
-        /* Hide any footer elements that might still appear */
-        .tableauPlaceholder::after {
-            content: "";
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 40px;
-            background: #f5f5f5;
-            z-index: 9999;
-            pointer-events: none;
-        }
-        
-        /* Hide the gray toolbar container completely */
-        .tableauPlaceholder iframe {
-            margin-bottom: -40px !important;
-        }
-        
-        .status {
-            padding: 10px 20px;
-            margin: 0;
-            text-align: center;
-            display: none;
-        }
-        
-        .status.success {
-            background: #d4edda;
-            color: #155724;
-        }
-        
-        .status.error {
-            background: #f8d7da;
-            color: #721c24;
-        }
-        
-        /* Responsive design */
-        @media (max-width: 1200px) {
-            iframe {
-                width: 90% !important;
-                height: 600px !important;
-            }
-        }
-        
-        @media (max-width: 768px) {
-            iframe {
-                width: 95% !important;
-                height: 500px !important;
-            }
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="header">
-            <h1>Baseball Player Dashboard</h1>
-        </div>
-        
-        <div id="status" class="status"></div>
-        
-        <div id="dashboardContainer">
-            <iframe 
-                src="https://public.tableau.com/views/2025alpha/Dashboard1?:embed=y&:display_count=no&:toolbar=no&:showVizHome=no&:showShareOptions=no&:tabs=no&:showFooter=false"
-                width="1024" 
-                height="687" 
-                frameborder="0"
-                style="border: none; display: block; margin: 0 auto;">
-            </iframe>
-        </div>
-    </div>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-    <script type='text/javascript'>
-        class TableauDashboard {
-            constructor() {
-                this.viz = null;
-                this.isLoaded = false;
-                this.init();
+<div class='tableauPlaceholder' id='viz1743098219082' style='position: relative'>
+  <noscript>
+    <a href='#'>
+      <img alt='Dashboard 1' src='https://public.tableau.com/static/images/20/2025alpha/Dashboard1/1_rss.png' style='border: none' />
+    </a>
+  </noscript>
+  <object class='tableauViz' style='display:none;'>
+    <param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' />
+    <param name='embed_code_version' value='3' />
+    <param name='site_root' value='' />
+    <param name='name' value='2025alpha&#47;Dashboard1' />
+    <param name='tabs' value='no' />
+    <param name='toolbar' value='no' />
+    <param name='static_image' value='https://public.tableau.com/static/images/20/2025alpha/Dashboard1/1.png' />
+    <param name='animate_transition' value='yes' />
+    <param name='display_static_image' value='yes' />
+    <param name='display_spinner' value='yes' />
+    <param name='display_overlay' value='yes' />
+    <param name='display_count' value='yes' />
+    <param name='language' value='en-US' />
+    <param name='device' value='desktop' />
+    <param name='showVizHome' value='no' />
+    <param name='showShareOptions' value='no' />
+    <param name='showFooter' value='false' />
+  </object>
+</div>
+
+<style>
+  /* Hide Tableau footer elements */
+  .TableauPlaceholderFooter, 
+  .tab-share, 
+  .tab-logo, 
+  .tableauFooter,
+  div[class*="Footer"],
+  div[class*="footer"],
+  div[id*="Footer"],
+  div[id*="footer"] {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+  }
+  
+  /* Create a mask that covers just the footer area */
+  #viz1743098219082 {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  #viz1743098219082:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 30px;
+    background-color: white;
+    z-index: 9999;
+  }
+  
+  /* Mobile scaling - much more aggressive to fit entire dashboard */
+  @media only screen and (max-width: 767px) {
+    .tableauPlaceholder {
+      display: flex !important;
+      justify-content: center !important;
+      align-items: center !important;
+      height: 100vh !important;
+      overflow: hidden !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+    
+    /* Ensure container has no scrollbars */
+    body, html {
+      overflow: hidden !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      height: 100% !important;
+      width: 100% !important;
+    }
+    
+    /* Very aggressive scaling for mobile */
+    .tableau-viz-container, iframe, .tableauViz {
+      transform-origin: center !important;
+      transform: scale(0.45) !important;
+      max-width: 100vw !important;
+      max-height: 100vh !important;
+      margin: 0 auto !important;
+      overflow: hidden !important;
+    }
+  }
+  
+  /* Extra small devices */
+  @media only screen and (max-width: 375px) {
+    .tableau-viz-container, iframe, .tableauViz {
+      transform: scale(0.4) !important;
+    }
+  }
+</style>
+
+<script type='text/javascript'>
+  var divElement = document.getElementById('viz1743098219082');
+  var vizElement = divElement.getElementsByTagName('object')[0];
+  
+  // Keep fixed dimensions for desktop
+  vizElement.style.width = '1024px';
+  vizElement.style.height = '727px';
+  
+  var scriptElement = document.createElement('script');
+  scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';
+  
+  // Function to handle iframe content once loaded
+  scriptElement.onload = function() {
+    // Apply footer hiding techniques
+    setTimeout(function() {
+      // Try to inject CSS into the iframe
+      var iframes = document.querySelectorAll('iframe');
+      Array.from(iframes).forEach(function(iframe) {
+        try {
+          var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+          var style = document.createElement('style');
+          style.textContent = `
+            .TableauPlaceholderFooter, 
+            .tab-share, 
+            .tab-logo, 
+            .tableauFooter,
+            div[class*="Footer"],
+            div[class*="footer"],
+            div[id*="Footer"],
+            div[id*="footer"],
+            .tab-logo-container {
+              display: none !important;
+              visibility: hidden !important;
+              height: 0 !important;
+              opacity: 0 !important;
             }
             
-            init() {
-                this.loadDashboard();
-                this.parseUrlParameters();
+            /* Add padding to the viz container */
+            body {
+              padding-bottom: 50px !important;
+              margin-bottom: -50px !important;
+              overflow: hidden !important;
             }
-            
-            loadDashboard() {
-                // Using direct iframe - no complex loading needed
-                this.isLoaded = true;
-                this.showStatus('Dashboard loaded successfully!', 'success');
-                
-                // Apply URL filters after a delay
-                setTimeout(() => {
-                    this.applyUrlFilters();
-                }, 2000);
-            }
-            
-            parseUrlParameters() {
-                const urlParams = new URLSearchParams(window.location.search);
-                this.playerParam = urlParams.get('player');
-                this.seasonParam = urlParams.get('season');
-            }
-            
-            applyUrlFilters() {
-                if (this.playerParam || this.seasonParam) {
-                    // Try to get the tableau object and apply filters
-                    const tableauObjects = document.getElementsByTagName('object');
-                    if (tableauObjects.length > 0) {
-                        try {
-                            // This approach works with the legacy embed method
-                            const message = `Filters from URL: ${this.playerParam || 'All Players'}`;
-                            this.showStatus(message, 'success');
-                            
-                            // For the legacy embed, we'll need to reload with filter parameters
-                            if (this.playerParam) {
-                                this.updateDashboardWithFilter();
-                            }
-                        } catch (error) {
-                            console.log('Filter application not available with legacy embed');
-                        }
-                    }
-                }
-            }
-            
-            updateDashboardWithFilter() {
-                // For URL-based filtering with legacy embed, we'd need to reconstruct the embed URL
-                // This is more complex with the legacy method, but the basic embed works great
-                console.log(`Would filter for player: ${this.playerParam}`);
-            }
-            
-            showStatus(message, type) {
-                const status = document.getElementById('status');
-                status.textContent = message;
-                status.className = `status ${type}`;
-                status.style.display = 'block';
-                
-                setTimeout(() => {
-                    status.style.display = 'none';
-                }, 3000);
-            }
+          `;
+          iframeDoc.head.appendChild(style);
+        } catch(e) {
+          console.log("Couldn't directly modify iframe content");
         }
+      });
+      
+      // Create an overlay div
+      var overlay = document.createElement('div');
+      overlay.style.position = 'absolute';
+      overlay.style.bottom = '0';
+      overlay.style.left = '0';
+      overlay.style.width = '100%';
+      overlay.style.height = '40px';
+      overlay.style.backgroundColor = 'white';
+      overlay.style.zIndex = '9999';
+      divElement.appendChild(overlay);
+      
+      // Set very aggressive scaling for mobile
+      function adjustForMobile() {
+        var isMobile = window.matchMedia("(max-width: 767px)").matches;
         
-        // Initialize when page loads
-        document.addEventListener('DOMContentLoaded', () => {
-            window.dashboard = new TableauDashboard();
-        });
-        
-        // For automation - simplified for legacy embed
-        window.isDashboardReady = () => {
-            return window.dashboard && window.dashboard.isLoaded;
-        };
-        
-        window.takeScreenshot = async () => {
-            return new Promise((resolve) => {
-                setTimeout(() => {
-                    console.log('Screenshot ready - dashboard is clean without toolbar');
-                    resolve(true);
-                }, 1000);
-            });
-        };
-    </script>
-</body>
-</html>
+        if (isMobile) {
+          // Find the tableau iframe and apply scaling
+          var tableauFrame = document.querySelector('iframe');
+          if (tableauFrame) {
+            // Create wrapper if needed
+            var wrapper = tableauFrame.parentNode;
+            wrapper.style.overflow = 'hidden';
+            wrapper.style.display = 'flex';
+            wrapper.style.justifyContent = 'center';
+            wrapper.style.alignItems = 'center';
+            
+            // Apply scaling based on screen width
+            var scaleValue = 0.45; // Default scaling
+            if (window.innerWidth <= 375) {
+              scaleValue = 0.4; // Even more aggressive scaling for small phones
+            }
+            
+            tableauFrame.style.transformOrigin = 'center';
+            tableauFrame.style.transform = 'scale(' + scaleValue + ')';
+            tableauFrame.style.maxWidth = '100vw';
+            tableauFrame.style.maxHeight = '100vh';
+            tableauFrame.parentNode.style.overflow = 'hidden';
+            
+            // Disable scrolling
+            document.body.style.overflow = 'hidden';
+            document.documentElement.style.overflow = 'hidden';
+          }
+        }
+      }
+      
+      // Apply mobile adjustments
+      adjustForMobile();
+      
+      // Handle orientation changes
+      window.addEventListener('resize', adjustForMobile);
+      window.addEventListener('orientationchange', function() {
+        setTimeout(adjustForMobile, 300);
+      });
+      
+    }, 1500);
+  };
+  
+  vizElement.parentNode.insertBefore(scriptElement, vizElement);
+</script>
