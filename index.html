@@ -84,16 +84,16 @@
         
         /* Responsive design */
         @media (max-width: 1200px) {
-            .tableauPlaceholder {
-                width: 90%;
-                height: 600px;
+            iframe {
+                width: 90% !important;
+                height: 600px !important;
             }
         }
         
         @media (max-width: 768px) {
-            .tableauPlaceholder {
-                width: 95%;
-                height: 500px;
+            iframe {
+                width: 95% !important;
+                height: 500px !important;
             }
         }
     </style>
@@ -107,37 +107,13 @@
         <div id="status" class="status"></div>
         
         <div id="dashboardContainer">
-            <div class='tableauPlaceholder' id='viz1743098219082'>
-                <noscript>
-                    <a href='#'>
-                        <img alt='Dashboard 1' src='https://public.tableau.com/static/images/20/2025alpha/Dashboard1/1_rss.png' style='border: none' />
-                    </a>
-                </noscript>
-                <object class='tableauViz' style='display:none;'>
-                    <param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' />
-                    <param name='embed_code_version' value='3' />
-                    <param name='site_root' value='' />
-                    <param name='name' value='2025alpha&#47;Dashboard1' />
-                    <param name='tabs' value='no' />
-                    <param name='toolbar' value='no' />
-                    <param name='showTabs' value='n' />
-                    <param name='showToolbar' value='n' />
-                    <param name='showAppBanner' value='false' />
-                    <param name='display_overlay' value='no' />
-                    <param name='display_count' value='no' />
-                    <param name='showVizHome' value='no' />
-                    <param name='showShareOptions' value='no' />
-                    <param name='showFooter' value='false' />
-                    <param name='showToolbarButton' value='false' />
-                    <param name='loadOrderID' value='0' />
-                    <param name='static_image' value='https://public.tableau.com/static/images/20/2025alpha/Dashboard1/1.png' />
-                    <param name='animate_transition' value='yes' />
-                    <param name='display_static_image' value='yes' />
-                    <param name='display_spinner' value='yes' />
-                    <param name='language' value='en-US' />
-                    <param name='device' value='desktop' />
-                </object>
-            </div>
+            <iframe 
+                src="https://public.tableau.com/views/2025alpha/Dashboard1?:embed=y&:display_count=no&:toolbar=no&:showVizHome=no&:showShareOptions=no&:tabs=no&:showFooter=false"
+                width="1024" 
+                height="687" 
+                frameborder="0"
+                style="border: none; display: block; margin: 0 auto;">
+            </iframe>
         </div>
     </div>
 
@@ -155,28 +131,14 @@
             }
             
             loadDashboard() {
-                var divElement = document.getElementById('viz1743098219082');
-                var vizElement = divElement.getElementsByTagName('object')[0];
+                // Using direct iframe - no complex loading needed
+                this.isLoaded = true;
+                this.showStatus('Dashboard loaded successfully!', 'success');
                 
-                // Set dimensions - make it taller so we can crop the bottom
-                vizElement.style.width = '1024px';
-                vizElement.style.height = '727px';
-                vizElement.style.marginBottom = '-40px';
-                
-                var scriptElement = document.createElement('script');
-                scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';
-                
-                scriptElement.onload = () => {
-                    this.isLoaded = true;
-                    this.showStatus('Dashboard loaded successfully!', 'success');
-                    
-                    // Apply URL filters after a delay
-                    setTimeout(() => {
-                        this.applyUrlFilters();
-                    }, 3000);
-                };
-                
-                vizElement.parentNode.insertBefore(scriptElement, vizElement);
+                // Apply URL filters after a delay
+                setTimeout(() => {
+                    this.applyUrlFilters();
+                }, 2000);
             }
             
             parseUrlParameters() {
